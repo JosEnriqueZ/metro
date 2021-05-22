@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-clean:production</actionName>
+            <displayName>clean:production</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>package</goal>
+                <goal>-Pproduction</goal>
+            </goals>
+        </action>
+        <action>
+            <actionName>CUSTOM-spring-boot:run</actionName>
+            <displayName>spring-boot:run</displayName>
+            <goals>
+                <goal>spring-boot:run</goal>
+            </goals>
+        </action>
+    </actions>
