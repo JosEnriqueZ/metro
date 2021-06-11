@@ -5,9 +5,9 @@
     <groupId>ts.com</groupId>
     <artifactId>tsparking50</artifactId>
     <name>tsparking50</name>
-    <version>1.0-SNAPSHOT</version>
-    <!--<packaging>jar</packaging>-->
-    <packaging>war</packaging>
+    <version>1.0</version>
+    <packaging>jar</packaging>
+    <!--<packaging>war</packaging>-->
 
     <properties>
         <java.version>15</java.version>
@@ -159,12 +159,96 @@
             <artifactId>postgresql</artifactId>
             <version>9.1-901-1.jdbc4</version>
         </dependency>
-        <dependency>
-           <groupId>org.springframework.boot</groupId>
-           <artifactId>spring-boot-starter-tomcat</artifactId>
-           <scope>provided</scope>
+<!--        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                  <artifactId>spring-boot-starter-tomcat</artifactId>
+                  <groupId>org.springframework.boot</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-servlet-api</artifactId>
+            <version>8.5.32</version>
+            <scope>provided</scope> 
+        </dependency>-->
+<!--        <dependency>
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-jasper</artifactId>
+                <scope>provided</scope>
+        </dependency>-->
+         <dependency>     
+                <groupId>org.springframework.boot</groupId>     
+                <artifactId>spring-boot-starter-tomcat</artifactId>   
+                <scope>provided</scope>  
+        </dependency>
+        <!--SELENIUM-->
+        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>3.141.59</version>
+        </dependency>
+
+        <!--ITEXT-->
+      <dependency>         
+         <groupId>com.itextpdf</groupId>         
+         <artifactId>kernel</artifactId>         
+         <version>7.0.2</version>     
+      </dependency>  
+      
+      <dependency>         
+         <groupId>com.itextpdf</groupId>         
+         <artifactId>io</artifactId>         
+         <version>7.0.2</version>     
+      </dependency>  
+      
+      <dependency>         
+         <groupId>com.itextpdf</groupId>         
+         <artifactId>layout</artifactId>         
+         <version>7.0.2</version>
+      </dependency>  
+      
+      <dependency>         
+         <groupId>com.itextpdf</groupId>         
+         <artifactId>forms</artifactId>         
+         <version>7.0.2</version>    
+      </dependency>  
+      
+      <dependency>         
+         <groupId>com.itextpdf</groupId>         
+         <artifactId>pdfa</artifactId>         
+         <version>7.0.2</version>     
+      </dependency>  
+      
+      <dependency>         
+         <groupId>com.itextpdf</groupId>         
+         <artifactId>sign</artifactId>         
+         <version>7.0.2</version>     
+      </dependency>  
+      
+      <dependency>         
+         <groupId>com.itextpdf</groupId>         
+         <artifactId>barcodes</artifactId>         
+         <version>7.0.2</version>     
+      </dependency>  
+      
+      <dependency>         
+         <groupId>com.itextpdf</groupId>         
+         <artifactId>font-asian</artifactId>         
+         <version>7.0.2</version>     
+      </dependency>  
+      
+      <dependency>         
+         <groupId>com.itextpdf</groupId>         
+         <artifactId>hyph</artifactId>         
+         <version>7.0.2</version>    
+      </dependency> 
     </dependencies>
+
 
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>
@@ -172,7 +256,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <!-- Clean build and startup time for Vaadin apps sometimes may exceed
+<!--                 Clean build and startup time for Vaadin apps sometimes may exceed
                      the default Spring Boot's 30sec timeout.  -->
                 <configuration>
                     <wait>500</wait>
@@ -180,8 +264,8 @@
                 </configuration>
             </plugin>
 
-            <!--
-                Take care of synchronizing java dependencies and imports in
+            
+<!--                Take care of synchronizing java dependencies and imports in
                 package.json and main.js files.
                 It also creates webpack.config.js if not exists yet.
             -->
@@ -229,7 +313,7 @@
             </build>
         </profile>
 
-<!--        <profile>
+        <profile>
             <id>it</id>
             <build>
                 <plugins>
@@ -254,7 +338,7 @@
                         </executions>
                     </plugin>
 
-                     Runs the integration tests (*IT) after the server is started 
+<!--                     Runs the integration tests (*IT) after the server is started -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
@@ -273,7 +357,7 @@
                     </plugin>
                 </plugins>
             </build>
-        </profile>-->
+        </profile>
 
     </profiles>
 </project>

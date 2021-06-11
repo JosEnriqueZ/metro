@@ -5,12 +5,15 @@
  */
 package ts.com.service.model.playa;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import ts.com.service.util.db.client.TableDB;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
+import ts.com.service.util.Util;
 
 /**
  *
@@ -18,21 +21,30 @@ import java.util.Objects;
  */
 @SuppressWarnings("serial")
 @TableDB(name="playa.ticket")
+
 public class Ticket implements Serializable {
 
     public Integer     id;
+    public String      str_creado; 
     public String      creador;
     public Boolean     activo;
     
     public String       serie;
     public Integer      numero;
-    public Date    fecha_ingreso;
-    public Date    fecha_salida;
+    
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    public Date         fecha_ingreso;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    public Date         fecha_salida;
+    public String       str_fecha_ingreso;
+    public String       str_fecha_salida;
     public String       placa;
     public String       encargado_dni;
     public BigDecimal   monto;
     public BigDecimal   tarifa;
     public Integer      turno;
+    public Boolean      cuadre_caja;
+    public Boolean      observacion;
 
 
     public Ticket() {
@@ -63,6 +75,19 @@ public class Ticket implements Serializable {
         return true;
     }
 
+    public String getActivo() {
+        return activo==false?"SI":"NO   ";
+    }
+
+    public String isCuadre_caja() {
+        return cuadre_caja==false?"NO":"SI   ";
+    }
+    
+    public String getObs() {
+        return observacion==false?"NO":"SI   ";
+    }
+    
+
     public String getCreador() {
         return creador;
     }
@@ -71,12 +96,12 @@ public class Ticket implements Serializable {
         return numero;
     }
 
-    public Date getFecha_ingreso() {
-        return fecha_ingreso;
+    public String getFecha_ingreso() {
+        return str_fecha_ingreso;
     }
 
-    public Date getFecha_salida() {
-        return fecha_salida;
+    public String getFecha_salida() {
+        return str_fecha_salida;
     }
 
     public String getPlaca() {
@@ -94,6 +119,8 @@ public class Ticket implements Serializable {
     public BigDecimal getTarifa() {
         return tarifa;
     }
+    
+    
     
     
     

@@ -6,6 +6,7 @@
 package ts.com.view.ticket;
 
 //import ts.com.client.view.*;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -31,14 +32,16 @@ import ts.com.client.component.PanelView;
 import ts.com.service.model.almacen.Almacen;
 import ts.com.service.model.empresa.Empresa;
 import ts.com.service.model.empresa.Sucursal;
+import ts.com.service.model.persona.Persona;
+import ts.com.service.model.playa.CierreCab;
 import ts.com.service.model.playa.Ticket;
 /**
  *
  * @author Enriquez
  */
-//@Route("")
-//@Theme(value = Lumo.class, variant = Lumo.LIGHT)
-public abstract class TicketUI extends PanelView {
+@Route("/")
+@Theme(value = Lumo.class, variant = Lumo.LIGHT)
+public abstract class CierreCajaUI extends PanelView {
 
 
     public final Button btnConnect = new Button("EXCEL",VaadinIcon.FILE, this::onBtnConnect).setStyles(
@@ -57,6 +60,8 @@ public abstract class TicketUI extends PanelView {
             "font-size","15px",
             "height","30px"
     );
+    public final Button btnExportPDF   = new Button("", VaadinIcon.FILE,"Exportar en PDF",
+    this::onBtnExportPDF).setStyle("color", "#F61F43");
     
     public final Button btnSubscribe = new Button("No tengo usuario. Deseo Inscribirme Ya!").setStyle("color", "#fe4164");
     public final HorizontalLayout pnl2 = new HorizontalLayout();
@@ -65,8 +70,12 @@ public abstract class TicketUI extends PanelView {
     public final DatePicker datePicker = new DatePicker();
     public final DatePicker dpFechaInicial = new DatePicker(LocalDate.now());
     public final DatePicker dpFechaFinal = new DatePicker(LocalDate.now());
+    
     public final ListBox<Sucursal> lbxSucursales = new ListBox();
-    public final DataTable<Ticket> dtTickets = new DataTable<>(true,false);
+    public final ListBox<Persona> lbxVigilante = new ListBox();
+    public final ListBox<String> lbxTurno = new ListBox();
+    
+    public final DataTable<CierreCab> dtCierreCab = new DataTable<>(true,false);
     public final HorizontalLayout Footer = new HorizontalLayout();
     
 //    public SearchPerson person = new SearchPerson();
@@ -75,36 +84,31 @@ public abstract class TicketUI extends PanelView {
 //    );
 //    public Checkbox cbxIsFinalProduct = new Checkbox("Productos Finales");
 //    
-    public TicketUI() {
+    public CierreCajaUI() {
         
-        super(VaadinIcon.RECORDS, "TICKETS2"); 
+        super(VaadinIcon.RECORDS, "CIERRES DE CAJA"); 
 //        label.setStyles("color",App.COLOR2);
+        
 //      video.getElement().setAttribute("url", "http://144.91.125.121:7007/files/prueba.mp4");
-        dtTickets.addCol(Ticket::getActivo, "ANULADO").setTextAlign(ColumnTextAlign.END);
-        dtTickets.addCol(Ticket::getFecha_ingreso, "F INGRESO").setTextAlign(ColumnTextAlign.END);
-        dtTickets.addCol(Ticket::getFecha_salida, "F SALIDA").setTextAlign(ColumnTextAlign.END);
-        dtTickets.addCol(Ticket::getCreador, "MOVIL").setTextAlign(ColumnTextAlign.END);
-        dtTickets.addCol(Ticket::getNumero, "TICKET").setTextAlign(ColumnTextAlign.END);
-        dtTickets.addCol(Ticket::getPlaca, "PLACA");
-        dtTickets.addCol(Ticket::getMonto, "MONTO");
-        dtTickets.addCol(Ticket::getTarifa, "TARIFA");
-        dtTickets.addCol(Ticket::isCuadre_caja, "CAJA");
-        dtTickets.addCol(Ticket::getEncargado_dni, "ENCARGADO");
+        dtCierreCab.addCol(CierreCab::getFecha, "FECHA").setTextAlign(ColumnTextAlign.END);
+        dtCierreCab.addCol(CierreCab::getTurno, "TURNO").setTextAlign(ColumnTextAlign.END);
+        dtCierreCab.addCol(CierreCab::getVigilante, "VIGILANTE").setTextAlign(ColumnTextAlign.END);
+        dtCierreCab.addCol(CierreCab::getTotal, "TOTAL").setTextAlign(ColumnTextAlign.END);
 //        dtValorizaciones.addCol(Ticket::getCosto_total, "TOTAL");
       
         btnSubscribe.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
-        pnl2.add(dpFechaInicial,dpFechaFinal);
+        pnl2.add(dpFechaInicial,dpFechaFinal,lbxVigilante,lbxTurno);
 //        person.setWidthFull();
         pnl2.setWidthFull();
         getHeader().add(getToolBar());
 //        getToolBar().getStyle().set("border", "red 5px solid");
         
         getToolBar().setWidthFull();
-        getToolBar().add(getBtnAdd(),getBtnEdit(),getBtnRefresh());
+        getToolBar().add(btnExportPDF,getBtnAdd(),getBtnEdit(),getBtnRefresh());
         Footer.add(btnCerrar);
         pnl2.setDefaultVerticalComponentAlignment(Alignment.END);
         getToolBar().setJustifyContentMode(JustifyContentMode.END);
-        getBody().add(pnl2,pnl3,dtTickets,Footer);
+        getBody().add(pnl2,pnl3,dtCierreCab,Footer);
         getBody().setWidthFull();
         btnConnect.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         this.getStyle().set("maxWidth", "1500px" );
@@ -120,7 +124,9 @@ public abstract class TicketUI extends PanelView {
     
     public void initStyles(){
 //        lbxAlmacenes.setPlaceholder("ALMACEN DESTINO");
-        dtTickets.setHeight("500px");
+        lbxVigilante.setLabel("Vigilante");
+        lbxTurno.setLabel("Turno");
+        dtCierreCab.setHeight("500px");
         btnPlantilla.setWidth("150px");
         btnCerrar.setWidth("150px");
         btnConnect.setWidth("150px");
@@ -135,6 +141,7 @@ public abstract class TicketUI extends PanelView {
     
 //    public abstract void onBtnAdd();
     public abstract void onBtnTotal();
+    public abstract void onBtnExportPDF();
     public abstract void onBtnIndicadores();
     public abstract void onBtnConnect();
     public abstract void onBtnPlantilla();

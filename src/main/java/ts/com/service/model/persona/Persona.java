@@ -15,32 +15,26 @@ import ts.com.service.util.db.client.TableDB;
 @TableDB(name = "persona.persona")
 public class Persona implements Serializable {
 
-    public Integer id;
-    public String creador;
-    public Boolean activo;
-    public String apellidos; 
-    public String nombres;
-    public Character sexo;
-    public DocumentoIdentidad documento_identidad;
-    public String identificador;
-    public String brevette;
-    public String email;
-    public String telefonos;
-    public String nombre_comercial;
+    public Integer id;//
+    public String creador;//
+    public Boolean activo; //
+    public String apellidos; //
+    public String nombres; //
+    public Character sexo;//
+    public Integer documento_identidad;//
+    public String identificador; //
+    public String brevette;//
+    public String email; //
+    public String telefonos;//
+    public String nombre_comercial; //
     
-    public Character tipo_persona;
-    public String codigo;
+    public Character tipo_persona;//
+    public String codigo;//
     
-    public String clave_portal;
-    public Integer ciclo;
-    public Character area;
-    public String numero_expediente;
-    public Date fecha_ingreso;
-    public Date fecha_termino;
-    
-    
-    public Character estado;
-    public String descripcion;
+    public String clave_portal;//
+    public Integer ciclo;   //
+
+	
     
 
     public Boolean getActivo() {
@@ -88,13 +82,6 @@ public class Persona implements Serializable {
 //        return ciclo==null?"Sin Asignar":ciclo.codigo;
     }
     
-    public String getFechaIngresoStr(){
-        return fecha_ingreso==null?"-":Util.formatDateDMY(fecha_ingreso);
-    }
-    
-    public String getFechaTerminoStr(){
-        return fecha_termino==null?"-":Util.formatDateDMY(fecha_termino);
-    }
     
     @Override
     public String toString() {

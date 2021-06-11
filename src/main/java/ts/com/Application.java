@@ -24,7 +24,20 @@ import ts.com.service.util.db.CConexion;
  */
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer{
+    
+   @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(applicationClass);
+    }
+    
+    public static void main(String[] args) {
+    SpringApplication.run(Application.class, args);
+    initApp();
+    }
+   
 
+    private static Class<Application> applicationClass = Application.class;
+    
 
     public static void initApp() {
         try {
@@ -97,11 +110,7 @@ public class Application extends SpringBootServletInitializer{
         }
     }
 
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-        initApp();
-        
-    }
+
 
 
 }

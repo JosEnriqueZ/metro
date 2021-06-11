@@ -15,6 +15,8 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -32,6 +34,8 @@ import ts.com.service.factory.Services;
 import ts.com.service.model.almacen.Almacen;
 import ts.com.service.model.empresa.Empresa;
 import ts.com.service.model.empresa.Sucursal;
+import ts.com.service.model.persona.Persona;
+import ts.com.service.model.playa.CierreCab;
 import ts.com.service.model.playa.Ticket;
 import ts.com.service.util.db.server.CRUD;
 
@@ -40,18 +44,37 @@ import ts.com.service.util.db.server.CRUD;
  * @author EnriqueZ
  */
 
-public class TicketView extends TicketUI {
+public class CierreCajaView extends CierreCajaUI {
     
    public List<Ticket> listTicket;
-   public TicketView() {
+   public List<CierreCab> listCab;
+   public List<Persona> listVigilantes;
+   public List<String> listTurno;
+   public CierreCajaView() {
        
        
        login();
         try {
+            listVigilantes = Services.getTicket().listPersonas();
+            Persona a = new Persona();
+            a.id = -1;
+            a.apellidos = "";
+            a.nombres = "SELECIONE VIGILANTE";  
+//            a.descripcion = "SELECIONE UN ALMACEN->";
+            listVigilantes.add(0, a);
+            lbxVigilante.setList(listVigilantes);
+            
+            listTurno = new ArrayList<>();
+            listTurno.add("MAÑANA");
+            listTurno.add("TARDE");
+            String turno = new String("SELECCIONE UN TURNO");
+            listTurno.add(0, turno);
+            lbxTurno.setList(listTurno);
+            
             onRefresh();
             
             } catch (Exception ex) {
-            Logger.getLogger(TicketView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CierreCajaView.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("ERROR: "+ex);
             }
     }
@@ -119,12 +142,12 @@ public class TicketView extends TicketUI {
 //            System.out.println("hola");
 //            view.showDialog();
 //            onRefresh();
-//        ValorizacionView view = new ValorizacionView();
-//        view.addSaveHandler(this::onRefresh);
-//        view.showDialog();
+        CierreCabView view = new CierreCabView();
+        view.addSaveHandler(this::onRefresh);
+        view.showDialog();
         } catch (Exception ex) {
-            Alerts.error("No se Encontro Alumno. \n" + ex.getMessage());
-            Logger.getLogger(TicketView.class.getName()).log(Level.SEVERE, null, ex);
+            Alerts.error("ERROR AL ABRIR. \n" + ex.getMessage());
+            Logger.getLogger(CierreCajaView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -132,10 +155,14 @@ public class TicketView extends TicketUI {
     public void onRefresh() {
         System.out.println("REFRSH");
        try {
-           listTicket = Services.getTicket().list(Client.ConvertToDate(dpFechaInicial.getValue()) , Client.ConvertToDate(dpFechaFinal.getValue()));
-           dtTickets.setList(listTicket);
+            Date fin = Client.ConvertToDate(dpFechaFinal.getValue());
+            fin.setHours(23);
+            fin.setMinutes(59);
+            fin.setSeconds(59);   
+             listCab = Services.getTicket().listCierreCab(Client.ConvertToDate(dpFechaInicial.getValue()),fin, lbxVigilante.getValue().apellidos, lbxTurno.getValue());
+            dtCierreCab.setList(listCab);
        } catch (Exception ex) {
-           Logger.getLogger(TicketView.class.getName()).log(Level.SEVERE, null, ex);
+           Logger.getLogger(CierreCajaView.class.getName()).log(Level.SEVERE, null, ex);
        }
     }
 
@@ -157,16 +184,16 @@ public class TicketView extends TicketUI {
 //           CRUD.update(vc);
 //           onRefresh();
        } catch (Exception ex) {
-           Logger.getLogger(TicketView.class.getName()).log(Level.SEVERE, null, ex);
+           Logger.getLogger(CierreCajaView.class.getName()).log(Level.SEVERE, null, ex);
            Alerts.error("Debe seleccionar una Valorizacion. " + ex);
        }
     }
 
     @Override
     public void onEdit() {
-//        ValorizacionView view = new ValorizacionView(dtValorizaciones.getSelectionModel().getFirstSelectedItem().get());
-//        view.addSaveHandler(this::onRefresh);
-//        view.showDialog();
+        CierreCabView view = new CierreCabView(dtCierreCab.getSelectionModel().getFirstSelectedItem().get());
+        view.addSaveHandler(this::onRefresh);
+        view.showDialog();
     }
 
     @Override
@@ -186,6 +213,11 @@ public class TicketView extends TicketUI {
 //        IndicadoresView view = new IndicadoresView();
 //        view.addSaveHandler(this::onRefresh);
 //        view.showDialog();
+    }
+    
+    @Override
+    public void onBtnExportPDF() {
+
     }
     
     
